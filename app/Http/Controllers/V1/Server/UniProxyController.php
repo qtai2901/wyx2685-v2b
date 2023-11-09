@@ -169,6 +169,8 @@ class UniProxyController extends Controller
             case 'trojan':
                 $response = [
                     'host' => $this->nodeInfo->host,
+                    'network' => $this->nodeInfo->network,
+                    'networkSettings' => $this->nodeInfo->network_settings,
                     'server_port' => $this->nodeInfo->server_port,
                     'server_name' => $this->nodeInfo->server_name,
                 ];
