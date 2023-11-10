@@ -180,7 +180,7 @@ class SSRPlus
         if(isset($server['network']) && in_array($server['network'], ["grpc", "ws"])){
             $uri .= "&type={$server['network']}";
             if($server['network'] === "grpc" && isset($server['network_settings']['serviceName'])) {
-                $uri .= "&path={$server['network_settings']['serviceName']}";
+                $uri .= "&serviceName={$server['network_settings']['serviceName']}";
             }
             if($server['network'] === "ws") {
                 if(isset($server['network_settings']['path'])) {
