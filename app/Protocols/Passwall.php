@@ -195,15 +195,15 @@ class Passwall
         $uri = "trojan://{$password}@{$server['host']}:{$server['port']}?{$query}";
         if(isset($server['network']) && in_array($server['network'], ["grpc", "ws"])){
             $uri .= "&type={$server['network']}";
-            if($server['network'] === "grpc" && isset($server['networkSettings']['serviceName'])) {
-                $uri .= "&path={$server['networkSettings']['serviceName']}";
+            if($server['network'] === "grpc" && isset($server['network_settings']['serviceName'])) {
+                $uri .= "&path={$server['network_settings']['serviceName']}";
             }
             if($server['network'] === "ws") {
-                if(isset($server['networkSettings']['path'])) {
-                    $uri .= "&path={$server['networkSettings']['path']}";
+                if(isset($server['network_settings']['path'])) {
+                    $uri .= "&path={$server['network_settings']['path']}";
                 }
-                if(isset($server['networkSettings']['headers']['Host'])) {
-                    $uri .= "&host={$server['networkSettings']['headers']['Host']}";
+                if(isset($server['network_settings']['headers']['Host'])) {
+                    $uri .= "&host={$server['network_settings']['headers']['Host']}";
                 }
             }
         }
