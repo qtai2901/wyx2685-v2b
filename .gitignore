@@ -19,3 +19,4 @@ composer.lock
 yarn.lock
 docker-compose.yml
 .DS_Store
+public/clients/*
