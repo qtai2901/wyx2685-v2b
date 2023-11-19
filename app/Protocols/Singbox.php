@@ -197,10 +197,10 @@ class SingBox
                         'short_id' => $tlsSettings['short_id']
                     ];
                 }
-                $fingerprints = ['chrome', 'firefox', 'safari', 'ios', 'edge', 'qq'];
+                $fingerprints = isset($server['tls_settings']['fingerprint']) ? $server['tls_settings']['fingerprint'] : 'chrome';
                 $tlsConfig['utls'] = [
                     "enabled" => true,
-                    "fingerprint" => $fingerprints[array_rand($fingerprints)]
+                    "fingerprint" => $fingerprints
                 ];
             }
             $array['tls'] = $tlsConfig;

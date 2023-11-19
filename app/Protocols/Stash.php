@@ -191,6 +191,8 @@ class Stash
 
         if ($server['network'] === 'tcp') {
             $tcpSettings = $server['network_settings'];
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') $array['network'] = $tcpSettings['header']['type'];
+            if (isset($tcpSettings['header']['request']['path'])) $array['http-opts']['path'] = $tcpSettings['header']['request']['path'];
         }
 
         if ($server['network'] === 'ws') {

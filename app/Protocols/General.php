@@ -119,7 +119,7 @@ class General
             "mode" => "gun",
             "security" => $server['tls'] !=0 ? ($server['tls'] == 2 ? "reality":"tls") : "",
             "flow" => $server['flow'],
-            "fp" => isset($server['fingerprint']) ? $server['fingerprint'] : 'chrome',
+            "fp" => isset($server['tls_settings']['fingerprint']) ? $server['tls_settings']['fingerprint'] : 'chrome',
             "sni" => "",
             "pbk" => "",
             "sid" =>"",

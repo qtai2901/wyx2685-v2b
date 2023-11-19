@@ -142,7 +142,7 @@ class Shadowrocket
             "mode" => "gun",
             "security" => $server['tls'] !=0 ? ($server['tls'] == 2 ? "reality":"tls") : "",
             "flow" => $server['flow'],
-            "fp" => isset($server['fingerprint']) ? $server['fingerprint'] : 'chrome',
+            "fp" => isset($server['tls_settings']['fingerprint']) ? $server['tls_settings']['fingerprint'] : 'chrome',
             "sni" => "",
             "pbk" => "",
             "sid" =>"",
@@ -246,8 +246,8 @@ class Shadowrocket
 
         if ($server['version'] == 2) {
             $uri = "hysteria2://{$password}@{$remote}:{$server['port']}/?insecure={$server['insecure']}&sni={$server['server_name']}";
-            if (isset($server['obfs']) && isset($server['obfs_password'])) {
-                $uri .= "&obfs={$server['obfs']}&obfs-password={$server['obfs_password']}";
+            if (isset($server['obfs']) && isset($server['obfs-password'])) {
+                $uri .= "&obfs={$server['obfs']}&obfs-password={$server['obfs-password']}";
             }
         } else {
             $uri = "hysteria://{$remote}:{$server['port']}/?";
@@ -260,8 +260,8 @@ class Shadowrocket
                 'downmbps' => $server['up_mbps']
             ]);
             $uri .= $query;
-            if (isset($server['obfs']) && isset($server['obfs_password'])) {
-                $uri .= "&obfs={$server['obfs']}&obfsParam{$server['obfs_password']}";
+            if (isset($server['obfs']) && isset($server['obfs-password'])) {
+                $uri .= "&obfs={$server['obfs']}&obfsParam{$server['obfs-password']}";
             }
         }
         $uri .= "#{$name}\r\n";

@@ -178,7 +178,7 @@ class ClashMeta
             $array['tls'] = true;
             $array['skip-cert-verify'] = isset($server['tls_settings']['allow_insecure']) && $server['tls_settings']['allow_insecure'] == 1 ? true : false;
             $array['flow'] = !empty($server['flow']) ? $server['flow']: "";
-            $array['client-fingerprint'] = !empty($server['fingerprint']) ? $server['fingerprint'] : 'chrome';
+            $array['client-fingerprint'] = !empty($server['tls_settings']['fingerprint']) ? $server['tls_settings']['fingerprint'] : 'chrome';
             if ($server['tls_settings']) {
                 $tlsSettings = $server['tls_settings'];
                 if (isset($tlsSettings['server_name']) && !empty($tlsSettings['server_name']))
