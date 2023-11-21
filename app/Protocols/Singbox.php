@@ -146,7 +146,8 @@ class SingBox
         if ($server['network'] === 'tcp') {
             $tcpSettings = $server['networkSettings'];
             if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') $array['transport']['type'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'])) $array['transport']['path'] = $tcpSettings['header']['request']['path'];
+            if (isset($tcpSettings['header']['request']['headers']['Host'])) $array['transport']['host'] = array($tcpSettings['header']['request']['headers']['Host']);
+            if (isset($tcpSettings['header']['request']['path'][0])) $array['transport']['path'] = $tcpSettings['header']['request']['path'][0];
         }
         if ($server['network'] === 'ws') {
             $array['transport']['type'] ='ws';
@@ -209,7 +210,8 @@ class SingBox
         if ($server['network'] === 'tcp') {
             $tcpSettings = $server['network_settings'];
             if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') $array['transport']['type'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'])) $array['transport']['path'] = $tcpSettings['header']['request']['path'];
+            if (isset($tcpSettings['header']['request']['headers']['Host'])) $array['transport']['host'] = array($tcpSettings['header']['request']['headers']['Host']);
+            if (isset($tcpSettings['header']['request']['path'][0])) $array['transport']['path'] = $tcpSettings['header']['request']['path'][0];
         }
         if ($server['network'] === 'ws') {
             $array['transport']['type'] ='ws';

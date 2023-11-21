@@ -35,6 +35,9 @@ class Passwall
             if ($item['type'] === 'trojan') {
                 $uri .= self::buildTrojan($user['uuid'], $item);
             }
+            if ($item['type'] === 'hysteria') {
+                $uri .= self::buildHysteria($user['uuid'], $item);
+            }
         }
         return base64_encode($uri);
     }
@@ -84,8 +87,11 @@ class Passwall
         }
         if ((string)$server['network'] === 'tcp') {
             $tcpSettings = $server['networkSettings'];
-            if (isset($tcpSettings['header']['type'])) $config['type'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'][0])) $config['path'] = $tcpSettings['header']['request']['path'][0];
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') {
+                $config['type'] = $tcpSettings['header']['type'];
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0])) $config['host'] = $tcpSettings['header']['request']['headers']['Host'][0];
+                if (isset($tcpSettings['header']['request']['path'][0])) $config['path'] = $tcpSettings['header']['request']['path'][0];
+            }
         }
         if ((string)$server['network'] === 'ws') {
             $wsSettings = $server['networkSettings'];
@@ -139,9 +145,12 @@ class Passwall
         }
         if ((string)$server['network'] === 'tcp') {
             $tcpSettings = $server['network_settings'];
-            if (isset($tcpSettings['header']['type'])) $config['headerType'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'])) $config['path'] = $tcpSettings['header']['request']['path'];
-            $output .= "&headerType={$config['headerType']}" . "&seed={$config['path']}";
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') {
+                $config['type'] = $tcpSettings['header']['type'];
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0])) $config['host'] = $tcpSettings['header']['request']['headers']['Host'][0];
+                if (isset($tcpSettings['header']['request']['path'][0])) $config['path'] = $tcpSettings['header']['request']['path'][0];
+            }
+            $output .= "&headerType={$config['headerType']}" . "&host={$config['host']}" . "&seed={$config['path']}";
         }
         if ((string)$server['network'] === 'kcp') {
             $kcpSettings = $server['network_settings'];
@@ -208,6 +217,35 @@ class Passwall
             }
         }
         
+        $uri .= "#{$name}\r\n";
+        return $uri;
+    }
+
+    public static function buildHysteria($password, $server)
+    {
+        $remote = filter_var($server['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? '[' . $server['host'] . ']' : $server['host'];
+     	$name = Helper::encodeURIComponent($server['name']);
+
+        if ($server['version'] == 2) {
+            $uri = "hysteria2://{$password}@{$remote}:{$server['port']}/?insecure={$server['insecure']}&sni={$server['server_name']}";
+            if (isset($server['obfs']) && isset($server['obfs_password'])) {
+                $uri .= "&obfs={$server['obfs']}&obfs-password={$server['obfs_password']}";
+            }
+        } else {
+            $uri = "hysteria://{$remote}:{$server['port']}/?";
+            $query = http_build_query([
+                'protocol' => 'udp',
+                'auth' => $password,
+                'insecure' => $server['insecure'],
+                'peer' => $server['server_name'],
+                'upmbps' => $server['down_mbps'],
+                'downmbps' => $server['up_mbps']
+            ]);
+            $uri .= $query;
+            if (isset($server['obfs']) && isset($server['obfs_password'])) {
+                $uri .= "&obfs={$server['obfs']}&obfsParam{$server['obfs_password']}";
+            }
+        }
         $uri .= "#{$name}\r\n";
         return $uri;
     }

@@ -80,12 +80,12 @@ class Loon
             array_push($config, 'transport=tcp');
             if ($server['networkSettings']) {
                 $tcpSettings = $server['networkSettings'];
-                if (isset($tcpSettings['header']['type']) && !empty($tcpSettings['header']['type']))
+                if (isset($tcpSettings['header']['type']) && !empty($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http')
                     $config = str_replace('transport=tcp', "transport={$tcpSettings['header']['type']}", $config);
                 if (isset($tcpSettings['header']['request']['path'][0]) && !empty($tcpSettings['header']['request']['path'][0]))
                     array_push($config, "path={$tcpSettings['header']['request']['path'][0]}");
-                if (isset($tcpSettings['header']['Host']) && !empty($tcpSettings['header']['Host']))
-                    array_push($config, "host={$tcpSettings['header']['Host']}");
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0]) && !empty($tcpSettings['header']['request']['headers']['Host'][0]))
+                    array_push($config, "host={$tcpSettings['header']['request']['headers']['Host'][0]}");
             }
         }
         if ($server['tls']) {
@@ -130,12 +130,12 @@ class Loon
             array_push($config, 'transport=tcp');
             if ($server['network_settings']) {
                 $tcpSettings = $server['network_settings'];
-                if (isset($tcpSettings['header']['type']) && !empty($tcpSettings['header']['type']))
+                if (isset($tcpSettings['header']['type']) && !empty($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http')
                     $config = str_replace('transport=tcp', "transport={$tcpSettings['header']['type']}", $config);
                 if (isset($tcpSettings['header']['request']['path'][0]) && !empty($tcpSettings['header']['request']['path'][0]))
                     array_push($config, "path={$tcpSettings['header']['request']['path'][0]}");
-                if (isset($tcpSettings['header']['Host']) && !empty($tcpSettings['header']['Host']))
-                    array_push($config, "host={$tcpSettings['header']['Host']}");
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0]) && !empty($tcpSettings['header']['request']['headers']['Host'][0]))
+                    array_push($config, "host={$tcpSettings['header']['request']['headers']['Host'][0]}");
             }
         }
         if ($server['tls'] === 1) {

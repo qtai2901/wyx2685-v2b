@@ -59,6 +59,10 @@ class Stash
                 array_push($proxy, self::buildTrojan($user['uuid'], $item));
                 array_push($proxies, $item['name']);
             }
+            if ($item['type'] === 'hysteria') {
+                array_push($proxy, self::buildHysteria($user['uuid'], $item));
+                array_push($proxies, $item['name']);
+            }
         }
 
         $config['proxies'] = array_merge($config['proxies'] ? $config['proxies'] : [], $proxy);
@@ -131,8 +135,11 @@ class Stash
         }
         if ($server['network'] === 'tcp') {
             $tcpSettings = $server['networkSettings'];
-            if (isset($tcpSettings['header']['type'])) $array['network'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'][0])) $array['http-opts']['path'] = $tcpSettings['header']['request']['path'][0];
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') {
+                $array['network'] = $tcpSettings['header']['type'];
+                if (isset($tcpSettings['header']['request']['headers']['Host'])) $array['http-opts']['headers']['Hosts'] = $tcpSettings['header']['request']['headers']['Host'];
+                if (isset($tcpSettings['header']['request']['path'][0])) $array['http-opts']['path'] = $tcpSettings['header']['request']['path'][0];
+            }
         }
         if ($server['network'] === 'ws') {
             $array['network'] = 'ws';
@@ -191,8 +198,11 @@ class Stash
 
         if ($server['network'] === 'tcp') {
             $tcpSettings = $server['network_settings'];
-            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') $array['network'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'])) $array['http-opts']['path'] = $tcpSettings['header']['request']['path'];
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') {
+                $array['network'] = $tcpSettings['header']['type'];
+                if (isset($tcpSettings['header']['request']['headers']['Host'])) $array['http-opts']['headers']['Hosts'] = $tcpSettings['header']['request']['headers']['Host'];
+                if (isset($tcpSettings['header']['request']['path'][0])) $array['http-opts']['path'] = $tcpSettings['header']['request']['path'][0];
+            }
         }
 
         if ($server['network'] === 'ws') {
@@ -231,8 +241,58 @@ class Stash
         $array['port'] = $server['port'];
         $array['password'] = $password;
         $array['udp'] = true;
+        if(isset($server['network']) && in_array($server['network'], ["grpc", "ws"])){
+            $array['network'] = $server['network'];
+            // grpc配置
+            if($server['network'] === "grpc" && isset($server['network_settings']['serviceName'])) {
+                $array['grpc-opts']['grpc-service-name'] = $server['network_settings']['serviceName'];
+            }
+            // ws配置
+            if($server['network'] === "ws") {
+                if(isset($server['network_settings']['path'])) {
+                    $array['ws-opts']['path'] = $server['network_settings']['path'];
+                }
+                if(isset($server['network_settings']['headers']['Host'])){
+                    $array['ws-opts']['headers']['Host'] = $server['network_settings']['headers']['Host'];
+                }
+            }
+        };
         if (!empty($server['server_name'])) $array['sni'] = $server['server_name'];
         if (!empty($server['allow_insecure'])) $array['skip-cert-verify'] = ($server['allow_insecure'] ? true : false);
+        return $array;
+    }
+
+    public static function buildHysteria($password, $server)
+    {
+        $array = [];
+        $array['name'] = $server['name'];
+        $array['server'] = $server['host'];
+        $array['port'] = $server['port'];
+        $array['udp'] = true;
+        $array['skip-cert-verify'] = $server['insecure'] == 1 ? true : false;
+
+        if (isset($server['server_name'])) $array['sni'] = $server['server_name'];
+
+        if ($server['version'] === 2) {
+            $array['type'] = 'hysteria2';
+            $array['auth'] = $password;
+            $array['fast-open'] = true;
+            if (isset($server['obfs'])){
+                $array['obfs'] = $server['obfs'];
+                $array['obfs-password'] = $server['obfs_password'];
+            }
+        } else {
+            $array['type'] = 'hysteria';
+            $array['auth_str'] = $password;
+            if (isset($server['obfs']) && isset($server['obfs_password'])){
+                $array['obfs'] = $server['obfs_password'];
+            }
+            //Todo:完善客户端上下行
+            $array['up-speed'] = $server['down_mbps'];
+            $array['down-speed'] = $server['up_mbps'];
+            $array['protocol'] = 'udp';
+        }
+
         return $array;
     }
 

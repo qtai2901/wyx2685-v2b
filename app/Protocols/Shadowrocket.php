@@ -95,6 +95,8 @@ class Shadowrocket
                     $config['obfs'] = $tcpSettings['header']['type'];
                 if (isset($tcpSettings['header']['request']['path'][0]) && !empty($tcpSettings['header']['request']['path'][0]))
                     $config['path'] = $tcpSettings['header']['request']['path'][0];
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0]))
+                    $config['obfs-host'] = $tcpSettings['header']['request']['headers']['Host'][0];
             }
         }
         if ($server['network'] === 'ws') {
@@ -166,9 +168,12 @@ class Shadowrocket
         }
         if ((string)$server['network'] === 'tcp') {
             $tcpSettings = $server['network_settings'];
-            if (isset($tcpSettings['header']['type'])) $config['headerType'] = $tcpSettings['header']['type'];
-            if (isset($tcpSettings['header']['request']['path'])) $config['path'] = $tcpSettings['header']['request']['path'];
-            $output .= "&headerType={$config['headerType']}" . "&seed={$config['path']}";
+            if (isset($tcpSettings['header']['type']) && $tcpSettings['header']['type'] == 'http') {
+                $config['type'] = $tcpSettings['header']['type'];
+                if (isset($tcpSettings['header']['request']['headers']['Host'][0])) $config['host'] = $tcpSettings['header']['request']['headers']['Host'][0];
+                if (isset($tcpSettings['header']['request']['path'][0])) $config['path'] = $tcpSettings['header']['request']['path'][0];
+            }
+            $output .= "&headerType={$config['headerType']}" . "&host={$config['host']}" . "&seed={$config['path']}";
         }
         if ((string)$server['network'] === 'kcp') {
             $kcpSettings = $server['network_settings'];
