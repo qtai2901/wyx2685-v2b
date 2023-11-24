@@ -7,7 +7,23 @@
  - [修改版XrayR](https://github.com/wyx2685/XrayR)
  - [修改版V2bX](https://github.com/wyx2685/V2bX)
  - [V2bX](https://github.com/InazumaV/V2bX)
-   
+
+## 原版迁移步骤
+
+按以下步骤进行面板文件迁移：
+
+    git remote set-url origin https://github.com/wyx2685/v2board  
+    git checkout master  
+    ./update.sh  
+
+
+按以下步骤刷新设置缓存，重启队列:
+
+    php artisan config:clear
+    php artisan config:cache
+    php artisan horizon:terminate
+
+
 # **V2Board**
 
 - PHP7.3+
