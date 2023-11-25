@@ -301,4 +301,13 @@ class UserController extends Controller
             'data' => true
         ]);
     }
+
+    public function delUser(Request $request)
+    {
+        $user = User::find($request->input('id'));
+        if (!$user) abort(500, '用户不存在');
+        return response([
+            'data' => $user->delete()
+        ]);
+    }
 }

@@ -89,6 +89,7 @@ class AdminRoute
             $router->post('/user/sendMail', 'V1\\Admin\\UserController@sendMail');
             $router->post('/user/ban', 'V1\\Admin\\UserController@ban');
             $router->post('/user/resetSecret', 'V1\\Admin\\UserController@resetSecret');
+            $router->post('/user/delUser', 'V1\\Admin\\UserController@delUser');
             $router->post('/user/setInviteUser', 'V1\\Admin\\UserController@setInviteUser');
             // Stat
             $router->get ('/stat/getStat', 'V1\\Admin\\StatController@getStat');
