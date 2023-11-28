@@ -5,7 +5,7 @@ use App\Models\ServerHysteria;
 use App\Models\User;
 use App\Utils\Helper;
 
-class SingBox
+class Singbox
 {
     public $flag = 'sing-box';
     private $servers;
