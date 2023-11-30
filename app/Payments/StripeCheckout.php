@@ -99,7 +99,7 @@ class StripeCheckout {
         \Stripe\Stripe::setApiKey($this->config['stripe_sk_live']);
         try {
             $event = \Stripe\Webhook::constructEvent(
-                file_get_contents('php://input'),
+                request()->getContent() ?: json_encode($_POST),
                 $_SERVER['HTTP_STRIPE_SIGNATURE'],
                 $this->config['stripe_webhook_key']
             );

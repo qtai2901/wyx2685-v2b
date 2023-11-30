@@ -17,14 +17,15 @@
         "fruitcake/laravel-cors": "^2.0",
         "google/recaptcha": "^1.2",
         "guzzlehttp/guzzle": "^7.4.3",
+        "joanhey/adapterman": "^0.6.1",
         "laravel/framework": "^8.0",
         "laravel/horizon": "^5.9.6",
         "laravel/tinker": "^2.5",
         "linfo/linfo": "^4.0",
+        "paragonie/sodium_compat": "^1.20",
         "php-curl-class/php-curl-class": "^8.6",
         "stripe/stripe-php": "^7.36.1",
-        "symfony/yaml": "^4.3",
-        "paragonie/sodium_compat": "^1.20"
+        "symfony/yaml": "^4.3"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
