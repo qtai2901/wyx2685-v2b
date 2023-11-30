@@ -136,7 +136,7 @@ class SSRPlus
                 if (isset($tcpSettings['header']['request']['headers']['Host'][0])) $config['host'] = $tcpSettings['header']['request']['headers']['Host'][0];
                 if (isset($tcpSettings['header']['request']['path'][0])) $config['path'] = $tcpSettings['header']['request']['path'][0];
             }
-            $output .= "&headerType={$config['headerType']}" . "&host={$config['host']}" . "&seed={$config['path']}";
+            $output .= "&headerType={$config['headerType']}" . "&host={$config['host']}" . "&path={$config['path']}";
         }
         if ((string)$server['network'] === 'kcp') {
             $kcpSettings = $server['network_settings'];
