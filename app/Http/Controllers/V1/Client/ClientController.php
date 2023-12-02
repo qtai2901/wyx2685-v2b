@@ -33,7 +33,7 @@ class ClientController extends Controller
                 }
             }
             $class = new General($user, $servers);
-            die($class->handle());
+            return $class->handle();
         }
     }
 
