@@ -28,7 +28,7 @@ class ClientController extends Controller
                     $file = 'App\\Protocols\\' . basename($file, '.php');
                     $class = new $file($user, $servers);
                     if (strpos($flag, $class->flag) !== false) {
-                        die($class->handle());
+                        return $class->handle();
                     }
                 }
             }
