@@ -19,6 +19,8 @@ php composer.phar update -vvv
 php_main_version=$(php -v | head -n 1 | cut -d ' ' -f 2 | cut -d '.' -f 1)
 if [ $php_main_version -ge 8 ]; then
     php composer.phar require joanhey/adapterman
+    php webman.php stop
+    echo "Webman stopped.Please restart it by yourself."
 fi
 
 php artisan v2board:update
