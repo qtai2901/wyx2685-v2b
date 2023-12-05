@@ -214,7 +214,7 @@ class StatController extends Controller
         }
         array_multisort(array_column($data, 'total'), SORT_DESC, $data);
         return [
-            'data' => $data
+            'data' => array_slice($data, 0, 15)
         ];
     }
 
@@ -254,7 +254,7 @@ class StatController extends Controller
         }
         array_multisort(array_column($data, 'total'), SORT_DESC, $data);
         return [
-            'data' => $data
+            'data' => array_slice($data, 0, 15)
         ];
     }
 
