@@ -20,13 +20,16 @@ class ManageController extends Controller
     public function sort(Request $request)
     {
         ini_set('post_max_size', '1m');
-        $params = $request->only(
-                'shadowsocks',
-                'vmess',
-                'vless',
-                'trojan',
-                'hysteria'
-            ) ?? [];
+
+        $jsonContent = request()->getContent() ?: json_encode($_POST);;
+        $data = json_decode($jsonContent, true);
+        $params = [
+            'shadowsocks' => $data['shadowsocks'] ?? null,
+            'vmess'       => $data['vmess'] ?? null,
+            'vless'       => $data['vless'] ?? null,
+            'trojan'      => $data['trojan'] ?? null,
+            'hysteria'    => $data['hysteria'] ?? null,
+        ];
         DB::beginTransaction();
         foreach ($params as $k => $v) {
             $model = 'App\\Models\\Server' . ucfirst($k);
