@@ -153,6 +153,15 @@ class Surfboard
         if (!empty($server['allow_insecure'])) {
             array_push($config, $server['allow_insecure'] ? 'skip-cert-verify=true' : 'skip-cert-verify=false');
         }
+        if(isset($server['network']) && $server['network'] === "ws") {
+            array_push($config, "ws=true");
+            if(isset($server['network_settings']['path'])) {
+                array_push($config, "ws-path={$server['network_settings']['path']}");
+            }
+            if(isset($server['network_settings']['headers']['Host'])) {
+                array_push($config, "ws-headers=Host:{$server['network_settings']['headers']['Host']}");
+            }
+        }
         $config = array_filter($config);
         $uri = implode(',', $config);
         $uri .= "\r\n";
